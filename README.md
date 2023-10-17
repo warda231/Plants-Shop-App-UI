@@ -1,4 +1,4 @@
-# flutter_application_1
+# Plants Shop App UI
 
 A new Flutter project.
 
