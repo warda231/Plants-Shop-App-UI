@@ -8,7 +8,8 @@ import 'package:flutter_application_1/Models/Plants.dart';
 import '../Utils/colors.dart';
 
 class Details extends StatefulWidget {
-  const Details({super.key});
+  const Details({super.key, required this.id});
+  final int id;
 
   @override
   State<Details> createState() => _DetailsState();
@@ -17,6 +18,8 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   final PageController _pagecontroller = PageController();
   int _currentpg = 0;
+        List<PlantProduct> plants = [];
+
 
   final List<String> imges = [
     'images/img1.png',
@@ -36,29 +39,58 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    List<PlantProduct> products = ProductData.products;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final PlantProduct product = PlantProduct(
+      id: widget.id,
+      name: products[widget.id]["name"] ?? '',
+      price: (products[widget.id]["price"] as num).toDouble() ?? 0.0,
+      imageUrl: products[widget.id]["imageUrl"] ?? '',
+      desc: products[widget.id]["desc"] ?? '',
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bkColor,
-        bottomOpacity: 0,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
         actions: [
-          Icon(
-            Icons.shopping_cart,
+
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 28,
+                ),
+              ),
+              Positioned(
+                right: 0,
+                child:
+              
+               Container(
+                                padding: EdgeInsets.all(4),
+
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 59, 107, 61),
+                  shape: BoxShape.circle,
+                ),
+                child: Text('0',style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
+                ),),
+              ))
+            ],
           ),
         ],
       ),
       body: Container(
         width: double.infinity,
-        //height: double.infinity,
-        decoration: BoxDecoration(gradient: LinearGradient(
-            colors: [bkColor, Colors.white],
-            //begin: Alignment.topLeft,
-            //end: Alignment.bottomRight,
-            stops: [0.0, 1.0])),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [bkColor, Colors.white],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: [0.0, 1.0])),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -74,7 +106,7 @@ class _DetailsState extends State<Details> {
                       itemCount: imges.length,
                       itemBuilder: (context, index) {
                         return Image.asset(
-                          imges[index],
+                          product.imageUrl,
                           fit: BoxFit.cover,
                         );
                       }),
@@ -108,7 +140,7 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                products[0].name,
+                product.name,
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -118,7 +150,7 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: const EdgeInsets.only(bottom: 15),
               child: Text(
-                products[0].desc,
+                product.desc,
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -127,14 +159,14 @@ class _DetailsState extends State<Details> {
             ),
             Container(
               width: screenWidth * 0.9,
-              height: screenHeight * 0.3,
+              height: screenHeight * 0.28,
               decoration: BoxDecoration(
                 color: green,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
-                  Row(
+                  const Row(
                     //mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -171,7 +203,7 @@ class _DetailsState extends State<Details> {
                               ),
                             ),
                             Text(
-                              '\$${products[0].price}',
+                              '\$${product.price}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -190,7 +222,7 @@ class _DetailsState extends State<Details> {
                             color: Color.fromARGB(255, 67, 96, 68),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               'Add to cart',
                               style: TextStyle(

@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Utils/colors.dart';
+import 'package:flutter_application_1/Views/PlantDetails.dart';
 import 'package:flutter_application_1/Widgets/productCard.dart';
 import 'package:flutter_application_1/Widgets/searchBar.dart';
 
@@ -20,7 +21,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    List<PlantProduct> products = ProductData.products;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,34 +91,24 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ProductCard(
-                        imageUrl: products[0].imageUrl,
-                        price: products[0].price,
-                        name: products[0].name,
+                        id: 0,
                       ),
                       //3rd container
                       ProductCard(
-                        imageUrl: products[1].imageUrl,
-                        price: products[1].price,
-                        name: products[1].name,
+                        id: 1,
                       ),
                     ],
                   ),
                   Column(
                     children: [
                       ProductCard(
-                        imageUrl: products[2].imageUrl,
-                        price: products[2].price,
-                        name: products[2].name,
+                       id: 2,
                       ),
                       ProductCard(
-                        imageUrl: products[3].imageUrl,
-                        price: products[3].price,
-                        name: products[3].name,
+                        id: 3,
                       ),
                       ProductCard(
-                        imageUrl: products[4].imageUrl,
-                        price: products[4].price,
-                        name: products[4].name,
+                       id: 4,
                       ),
                     ],
                   ),
@@ -132,89 +122,3 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ProductCard extends StatelessWidget {
-  final String imageUrl;
-
-  final double price;
-
-  final String name;
-
-  const ProductCard({
-    super.key,
-    required this.imageUrl,
-    required this.price,
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Calculate the card width and height based on screen size
-    final cardWidth = screenWidth * 0.4;
-    final cardHeight = screenWidth * 0.6;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
-        width: cardWidth,
-        height: cardHeight,
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            // height: 500,
-            //width: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Text(
-                    name, // Replace with your product name
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$${price}', // Replace with your product name
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Icon(
-                            CupertinoIcons.heart_fill,
-                            color: Colors.white,
-                          ))
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

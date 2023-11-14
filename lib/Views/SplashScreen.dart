@@ -18,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   final List<String> imges = [
     'images/img1.png',
-    'images/img2.jpg',
-    'images/img3.jpg',
+    'images/img2.png',
+    'images/img3.png',
   ];
 
   @override
@@ -164,10 +164,28 @@ class _SplashScreenState extends State<SplashScreen> {
                   color: Color.fromARGB(255, 98, 152, 100),
                   borderRadius: BorderRadius.circular(40),
                 ),
-                child: Icon(
-                  Icons.arrow_forward,
+                child: IconButton(
+                  onPressed: () {
+                    if (_currentpg < imges.length - 1) {
+                    _pagecontroller.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                    setState(() {
+                      _currentpg++;
+                    });
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  }
+                  },
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    size: 40,
                   color: Colors.white,
-                  size: 40,
+                  ),
                 ),
               ),
             ],
