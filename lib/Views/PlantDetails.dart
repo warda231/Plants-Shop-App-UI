@@ -3,7 +3,11 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Controller/CartController.dart';
+import 'package:flutter_application_1/Models/CartItem.dart';
 import 'package:flutter_application_1/Models/Plants.dart';
+import 'package:flutter_application_1/Widgets/CartDialog.dart';
+import 'package:get/get.dart';
 
 import '../Utils/colors.dart';
 
@@ -32,13 +36,15 @@ class _DetailsState extends State<Details> {
     super.initState();
     _pagecontroller.addListener(() {
       setState(() {
-        _currentpg = _pagecontroller.page! as int;
+        _currentpg = _pagecontroller.page!.round();
+
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final CartController _controller=Get.put(CartController(),permanent: true);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final PlantProduct product = PlantProduct(
@@ -47,6 +53,8 @@ class _DetailsState extends State<Details> {
       price: (products[widget.id]["price"] as num).toDouble() ?? 0.0,
       imageUrl: products[widget.id]["imageUrl"] ?? '',
       desc: products[widget.id]["desc"] ?? '',
+                  quantity: products[widget.id]["quantity"]?? 0,
+
     );
 
     return Scaffold(
@@ -56,11 +64,21 @@ class _DetailsState extends State<Details> {
 
           Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Icon(
-                  Icons.shopping_cart_outlined,
-                  size: 28,
+              GestureDetector(
+                onTap: (){
+                   showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CartDialogBox();
+      },
+    );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 28,
+                  ),
                 ),
               ),
               Positioned(
@@ -74,10 +92,12 @@ class _DetailsState extends State<Details> {
                   color: const Color.fromARGB(255, 59, 107, 61),
                   shape: BoxShape.circle,
                 ),
-                child: Text('0',style: TextStyle(
+                child: 
+                Obx(() =>  Text('${_controller.cartItems.length}',style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold
-                ),),
+                ),),)
+               
               ))
             ],
           ),
@@ -105,9 +125,12 @@ class _DetailsState extends State<Details> {
                       controller: _pagecontroller,
                       itemCount: imges.length,
                       itemBuilder: (context, index) {
-                        return Image.asset(
-                          product.imageUrl,
-                          fit: BoxFit.cover,
+                        return Hero(
+      tag: 'plant-${widget.id}',
+                          child: Image.asset(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
                         );
                       }),
                 ),
@@ -215,20 +238,25 @@ class _DetailsState extends State<Details> {
                         SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          width: screenWidth * 0.4,
-                          height: screenHeight * 0.12,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 67, 96, 68),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Add to cart',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                        GestureDetector(
+                          onTap: (){
+    _controller.addToCart(product);
+                          },
+                          child: Container(
+                            width: screenWidth * 0.4,
+                            height: screenHeight * 0.12,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 67, 96, 68),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Add to cart',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),

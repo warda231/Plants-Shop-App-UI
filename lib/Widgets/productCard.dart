@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Models/Plants.dart';
 import 'package:flutter_application_1/Views/HomePage.dart';
 import 'package:flutter_application_1/Views/PlantDetails.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class ProductCard extends StatefulWidget {
- final int id;
+  final int id;
 
   const ProductCard({
-    super.key, required this.id,
-   
+    super.key,
+    required this.id,
   });
 
   @override
@@ -17,34 +19,39 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-      bool tap = false;
-      int buttonPressed=0;
+  bool tap = false;
+  int buttonPressed = 0;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Calculate the card width and height based on screen size
     final cardWidth = screenWidth * 0.4;
     final cardHeight = screenWidth * 0.6;
-      List<PlantProduct> plants = [];
+    List<PlantProduct> plants = [];
 
-       final PlantProduct product = PlantProduct(
+    final PlantProduct product = PlantProduct(
       id: widget.id,
       name: products[widget.id]["name"] ?? '',
       price: (products[widget.id]["price"] as num).toDouble() ?? 0.0,
       imageUrl: products[widget.id]["imageUrl"] ?? '',
       desc: products[widget.id]["desc"] ?? '',
+            quantity: products[widget.id]["quantity"]?? 0,
+
     );
+
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Details(id: product.id,)),
+          Get.to(
+            () => Details(
+              id: product.id,
+            ),
+            transition: Transition.rightToLeftWithFade,
+            duration: const Duration(milliseconds: 800),
           );
         },
         child: Container(
@@ -64,7 +71,8 @@ class _ProductCardState extends State<ProductCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
+                    Hero(
+                      tag: 'plant-${product.id}',
                       child: Image.asset(
                         product.imageUrl,
                         fit: BoxFit.cover,
@@ -89,15 +97,10 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            buttonPressed % 2==1?
                             setState(() {
                               tap = true;
-                            }):
-                            setState(() {
-                              tap = false;
                             });
                           },
-                          
                           child: Container(
                               height: 30,
                               width: 30,

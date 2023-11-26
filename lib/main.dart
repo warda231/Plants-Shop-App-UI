@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Views/HomePage.dart';
 import 'package:flutter_application_1/Views/PlantDetails.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'Views/SplashScreen.dart';
 import 'Widgets/productCard.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

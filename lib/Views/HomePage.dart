@@ -3,11 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Utils/colors.dart';
-import 'package:flutter_application_1/Views/PlantDetails.dart';
 import 'package:flutter_application_1/Widgets/productCard.dart';
 import 'package:flutter_application_1/Widgets/searchBar.dart';
 
-import '../Models/Plants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +30,9 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: bkColor,
         bottomOpacity: 0,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+        leading: IconButton(onPressed: () {
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_ios)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 4, bottom: 4),
